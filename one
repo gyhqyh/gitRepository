@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    function foo() {
+        var a, b
+        function bar() {
+            console.log(a++)// 引用变量
+        }
+        return bar()
+    }
+    var f = foo()
+    /*函数调用 此时函数中的变量foo中的局部变量b被销毁了 a还活着
+    * a活着是因为变量 bar 对应的 函数对象没有成为垃圾对象  bar也被销毁了
+    * */
+    f()
+    f()
+    f = null 
+    /*a 被销毁 f 对应的对象为垃圾对象 */
+</script>
+</body>
+</html>
