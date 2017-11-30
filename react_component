@@ -1,0 +1,70 @@
+class App extends React.Component {
+    constructor (props) {
+        super(props)
+        this.state = {
+            arr : ['吃饭', '睡觉', '打豆豆', '看遮天']
+        }
+        this.get = this.get.bind(this)
+    }
+//    todo 外部定义 内部调用  可以把信息传递出来
+    get (msg) {
+        let {arr} = this.state
+//      todo  unshift()返回值是数组的长度
+        arr.unshift(msg)
+
+       this.setState({arr})
+
+    }
+    render () {
+        let {arr} = this.state
+        let length = arr.length
+        return (
+            <div>
+              <h2>Simple TODO List</h2>
+              <Add get={this.get} length={length}/>
+              <Show arr={arr}/>
+            </div>
+        )
+    }
+}
+class Add extends React.Component {
+    constructor (props) {
+        super(props)
+        this.cli = this.cli.bind(this)
+    }
+    cli () {
+        let val = this.refs.msg.value
+        console.log(val)
+        if(!val.trim()){
+            alert('不能为空')
+            return
+        }
+        this.props.get(val)
+        this.refs.msg.value = ''
+
+    }
+    render () {
+        return (
+            <div>
+                <input ref='msg' type="text" />
+                <button onClick={this.cli}>Add #{this.props.length}</button>
+            </div>
+        )
+    }
+}
+    class Show extends React.Component {
+
+        render () {
+            let {arr} = this.props
+            return (
+                    <ul>
+                        {
+                            this.props.arr.map((item, index) => {
+                                return <li key={index}>{item}</li>
+                            })
+                        }
+                    </ul>
+            )
+        }
+    }
+    ReactDOM.render(<App />, document.getElementById('example'))
