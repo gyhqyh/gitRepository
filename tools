@@ -111,3 +111,14 @@ var dateFormat = function (timestamp, formats) {
         })[matches];
     });
 };
+/*
+3.
+转换数字保留两位小数，并且每三位给一个空格
+*/
+1  function number(data){
+2     if(data!=null){
+3       return data.toFixed(2).replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g,'$&,');
+4     }else{
+5       return ;
+6     }
+7   }
