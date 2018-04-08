@@ -1,0 +1,68 @@
+.child {
+  display: inline-block;
+}
+.parent {
+  text-algin: center;
+}
+2.
+.child {
+  display: table;
+  margin: 0 auto;
+}
+
+3.
+.child {
+   position: absolute;
+   left: 50%;
+   transform: translateX(-50%);
+}
+.parent {
+  position: relative;
+}
+4.
+.child {
+ display: flex;
+}
+.parent {
+   margin: 0 auto;
+}
+5.
+.parent {
+ display: flex;
+ justify-content:center;
+}
+垂直居中
+.parent {
+  display:table-cell;
+  vertical-align: middle;
+}
+
+3.
+.child {
+   position: absolute;
+   top: 50%;
+   transform: translateY(-50%);
+}
+.parent {
+  position: relative;
+}
+
+5.
+水平垂直居中
+1.
+.parent {
+ display: flex;
+ justify-content:center;
+ align-items:center;
+}
+有一定的兼容问题
+2.
+.parent {
+  text-align: center;
+  display: table-cell;
+  vertical-align: middle;
+}
+.child {
+  display: inline-block;
+}
+兼容好
