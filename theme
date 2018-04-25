@@ -75,7 +75,7 @@ export default {
     }
   },
   watch: {
-    theme (n,o) {
+    themeColor (n,o) {
       console.log(n,o)
       //感觉怎么都是 读取和调用是同步的 有点小困惑
       this._toggleClass(document.body,`custom-${this.themeColor}`)
