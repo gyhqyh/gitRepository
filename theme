@@ -1,4 +1,3 @@
-//App.vue
 <template>
   <div id="app">
     <h1>我是来被测试的</h1>
@@ -35,7 +34,7 @@ export default {
         value: '1b1e24',
         label: '主题2'
       }],
-      theme: 'yasuo'
+      theme: 'yasuo',
     }
   },
   computed : {
@@ -43,14 +42,23 @@ export default {
   },
   mounted () {
     //1.localStorage 保持状态
-    if(localStorage.getItem('theme')) {
-      console.log(localStorage.getItem('theme'))
-    //  1.2有就直接拿来用
-      this._toggleClass(document.body,`custom-${localStorage.getItem('theme')}`)
-    //  1.2 同时让选项卡里面默认显示，我选择的那个主题
-      this.theme = localStorage.getItem('theme')
+    let local_theme = JSON.parse(localStorage.getItem('theme'))
+    if(local_theme) {
+      console.log(local_theme,1,`custom-${local_theme}`)
+    //  1.2有就直接拿来用   `custom-${localStorage.getItem('theme')}`
+
+      this._toggleClass(document.body, `custom-${local_theme}`)
+    //  1.2 同时让选项卡里面默认显示，我选择的那个主题 这里也导致一个bug 就是这里一改 下面的watch触发
+      this.theme = local_theme
+
     } else {
-      console.log(localStorage.getItem('theme'),2)
+
+      console.log(local_theme,1,`custom-${this.themeColor}`)
+
+      /*todo 解决首屏没有样式问题 就是没有存储localStorage的问题*/
+      let data = this.theme
+      this.$store.commit('set_chemecolor',{data})
+
       //1.2 没有就去 vuex中取出
       this._toggleClass(document.body,`custom-${this.themeColor}`)
     }
@@ -62,22 +70,28 @@ export default {
      if(!ele || !cla) {
        return
      }
+     console.log(cla,'toggle')
      ele.className = cla
     },
     handle_change () {
-      console.log(this.theme,99)
+      console.log(this.theme,99,'hanle_change')
       let data = this.theme
-      //1.3 用户改变主题 跳过了vuex那步
+      //1.3 用户改变主题
       this.$store.commit('set_chemecolor',{data})
      // 1.3 保存用户改变主题, 好像不用和上面同步
-      localStorage.setItem('theme',data)
+      localStorage.setItem('theme',JSON.stringify(data))
 
     }
   },
   watch: {
-    themeColor (n,o) {
+  /*  theme (n,o) {
       console.log(n,o)
-      //感觉怎么都是 读取和调用是同步的 有点小困惑
+      if(this.flag) {
+        this._toggleClass(document.body,`custom-${this.themeColor}`)
+      }
+    }*/
+    themeColor (n,o) {
+      console.log(n,o,'watch')
       this._toggleClass(document.body,`custom-${this.themeColor}`)
     }
   }
@@ -98,6 +112,7 @@ export default {
   }
 }
 </style>
+
 
 
 
