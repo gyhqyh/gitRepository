@@ -162,4 +162,5 @@ gulp.task('css-wrap', function () {
     .pipe(cleanCSS())
     .pipe(gulp.dest('src/assets/css/theme/yasuo')) /* 存放的目录 */
 })
-
+ 
+// 命令行执行 gulp css-wrap 生成压缩文件
