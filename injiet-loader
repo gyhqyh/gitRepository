@@ -1,0 +1,50 @@
+<template>
+  <div class="msg">{{ msg }}</div>
+</template>
+
+<script>
+// 这里需要被拦截
+import getData from 'src/lib/apis/getData'
+
+export default {
+  data () {
+    return {
+      msg: getData.getData()
+    }
+  }
+}
+</script>
+
+作者：Geovanni.zhang
+链接：https://www.zhihu.com/question/50566681/answer/267276949
+来源：知乎
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+作者：Geovanni.zhang
+链接：https://www.zhihu.com/question/50566681/answer/267276949
+来源：知乎
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+/* eslint-disable */
+import Vue from 'vue'
+const getData = () => {
+  return 'hello world'
+}
+// 这里使用loader之后没办法使用@components等resolve配置
+const MyModuleInjector = require('!!vue-loader?inject!./MyComponent.vue')
+const MyComponent = MyModuleInjector({
+  'src/lib/apis/getData': { getData },
+})
+
+import ElementUI from 'element-ui';
+Vue.use(ElementUI);
+
+describe('MyComponent', () => {
+  // 组件实例
+  const Constructor = Vue.extend(MyComponent);
+  const myComponent = new Constructor().$mount();
+  // 检查msg
+  it('msg should in page', () => {
+    expect(myComponent.$el.textContent).to.contain('hello world')
+  })
+})
