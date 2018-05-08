@@ -50,3 +50,65 @@ if (store.getters.roles.length === 0) { // 判断当前用户是否已拉取完u
 当然如果是做了单点登录得功能的话，用户信息存储在本地也是可以的。当你一台电脑登录时，另一台会被提下线，所以总会重新登录获取最新的内容。
 
 而且从代码层面我建议还是把 login和get_user_info两件事分开比较好，在这个后端全面微服务的年代，后端同学也想写优雅的代码~
+
+
+
+
+
+精简版
+之前在基于Vue实现后台系统权限控制一文中提到路由权限的实现思路，因为不喜欢在每次路由跳转的before钩子里做判断，
+所以在初始化Vue实例前对路由做了筛选，再用实际路由初始化Vue实例，代价是登录页需要从Vue实例中独立出来，实现上倒没什么问题，
+不过这种做法需要在登录和首页之间通过url跳转，感觉总是不太”优雅”，实际上只要能在登录后动态修改当前实例的路由就行了，
+之前确实没办法，但vue-router 2.2版本新增了一个router.addRoutes(routes)方法，让动态路由得以实现。
+
+想当然的实现方案
+用动态路由实现路由权限控制貌似是一个完美的方案，初始路由只有登录和404，登录后动态添加可用路由，同时将菜单数据保存到Vuex或本地用于实现动态菜单，
+关键节点大致如下：
+
+
+//初始路由：
+[{
+  path: '/login',
+  name: 'login',
+  component: (resolve) => require(['../views/common/404.vue'], resolve)
+}, {
+  path: '/404',
+  name: '404',
+  component: (resolve) => require(['../views/common/404.vue'], resolve)
+}, {
+  path: '*',
+  redirect: '/404'
+}]
+
+//登录逻辑
+let vm = this;
+axios.get('/login', vm.user).then((res) => {
+    let extendsRoutes = filterRoutes(res.menus); 
+    <!--
+    //假设得到的可用路由如下
+    [{
+      path: '/',
+      name: '首页',
+      component: (resolve) => require(['../views/index.vue'], resolve),
+      children: [{
+        path: '/menus',
+        name: '菜单管理',
+        component: (resolve) => require(['../views/menus.vue'], resolve)
+      }, {
+        path: '/resources',
+        name: '资源管理',
+        component: (resolve) => require(['../views/resources.vue'], resolve)
+      }]
+    }]-->
+    //存菜单
+    sessionStorage.setItem('menus',JSON.stringify(extendsRoutes[0].children));
+    //动态添加路由
+    vm.$router.addRoutes(extendsRoutes);
+    //跳转到应用界面
+    vm.$router.push({path:'/'});
+})
+
+//首页获取菜单数据
+this.menus = JSON.parse(sessionStorage.getItem('menus')); 
+//用此数据循环菜单
+..
