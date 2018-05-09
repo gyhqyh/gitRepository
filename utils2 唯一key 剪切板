@@ -1,0 +1,81 @@
+//创建一个唯一的key 使得<router-link :key='createUniqueString()'>
+/**
+ * Created by jiachenpan on 17/3/8.
+ */
+export default function createUniqueString() {
+  const timestamp = +new Date() + ''
+  const randomNum = parseInt((1 + Math.random()) * 65536) + ''
+  return (+(randomNum + timestamp)).toString(32)                  //"ifabljhcb540"
+}
+
+
+
+//剪切板
+import Vue from 'vue'
+import Clipboard from 'clipboard'
+
+function clipboardSuccess() {
+  Vue.prototype.$message({
+    message: 'Copy successfully',
+    type: 'success',
+    duration: 1500
+  })
+}
+
+function clipboardError() {
+  Vue.prototype.$message({
+    message: 'Copy failed',
+    type: 'error'
+  })
+}
+
+export default function handleClipboard(text, event) {
+
+//这个库应该是接受两个参数 目标元素，和内容
+  const clipboard = new Clipboard(event.target, {
+    text: () => text
+  })
+  clipboard.on('success', () => {
+    clipboardSuccess()
+    clipboard.off('error')
+    clipboard.off('success')
+    clipboard.destroy()
+  })
+  clipboard.on('error', () => {
+    clipboardError()
+    clipboard.off('error')
+    clipboard.off('success')
+    clipboard.destroy()
+  })
+  clipboard.onClick(event)
+}
+
+
+//cookies
+import Cookies from 'js-cookie'
+
+const TokenKey = 'Admin-Token'
+
+export function getToken() {
+  return Cookies.get(TokenKey)
+}
+
+export function setToken(token) {
+  return Cookies.set(TokenKey, token)
+}
+
+export function removeToken() {
+  return Cookies.remove(TokenKey)
+}
+
+//切换组件中动画的类名把
+// translate router.meta.title, be used in breadcrumb sidebar tagsview
+export function generateTitle(title) {
+  const hasKey = this.$te('route.' + title)
+  const translatedTitle = this.$t('route.' + title) // $t :this method from vue-i18n, inject in @/lang/index.js
+
+  if (hasKey) {
+    return translatedTitle
+  }
+  return title
+}
