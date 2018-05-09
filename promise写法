@@ -39,3 +39,7 @@
     ){}).catch(function(err){}) 当action发完请求的时候调用resolve或者reject页面就会知道
     
     和我之前用穿一个页面中的函数要好的多，虽然两者的效果差不多，但是明显后者更为优雅
+    
+    
+    牛气的async 定义的函数有两大方面
+    1 会等待异步程序执行 2 本身返回promise对象 3 return 对应resolve Promise.reject()对应catch 或者throw newError（‘出错了’）
