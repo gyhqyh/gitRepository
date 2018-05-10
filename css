@@ -66,3 +66,5 @@
   display: inline-block;
 }
 兼容好
+
+非第一个 .el-button+.el-button    .el-button: not(:first-child)
