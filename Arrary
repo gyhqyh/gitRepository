@@ -1,0 +1,124 @@
+forEach() 方法对数组的每一个元素执行一次提供的函数。
+
+map() 方法创建一个新数组，其结果是该数组都执行一次函数，原函数保持不变。
+
+filter() 方法使指定函数测试数组的每一个元素，并放回一个通过元素的新数组。
+
+some() 方法测试该数组有元素通过了指定函数的测试，如果有返回true，否则，返回false。
+
+every() 方法测试该数组是否全部通过指定函数测试，全部通过返回true，否则，返回false。
+
+ 
+
+forEach 遍历数组
+
+1
+2
+3
+4
+5
+var arr = ["a", "b", "c"];
+ 
+arr.forEach(function(element,index) {
+    console.log(element,index);      
+});
+ 
+
+ 
+
+ 
+
+map 返回新数组，为当前元素加字符串m
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+var arr = ["a", "b", "c"];
+ 
+arr.map(function(element,index) {
+    return element += "m";
+});
+ 
+// 将给定数组的元素转成整数
+ 
+["1", "2", "3"].map(parseInt);         // [1, NaN, NaN]
+// 等价于
+["1", "2", "3"].map(function(value,index,array){
+    return parseInt(value,index);
+});
+parseInt(3,1);                         // NaN   parseInt(string, radix) 函数将给定的字符串以指定基数解析成为整数。
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+filter 返回大于10的元素
+
+1
+2
+3
+4
+5
+6
+7
+// 12, 130, 44
+var arr = [12, 5, 8, 130, 44];
+arr.filter(function(value){
+    return value>10
+});
+// 等价于
+arr.filter((value)=>value>10);
+ 
+
+ 
+
+ 
+
+ 
+
+some 判断当前数组有元素大于10的元素
+
+1
+2
+3
+4
+var arr = [12, 5, 8, 130, 44];
+arr.some(function(value){                  // true
+    return value>10
+});
+ 
+
+ 
+
+ 
+
+every 判断当前数组所有元素是否都大于10
+
+1
+2
+3
+4
+var arr = [12, 5, 8, 130, 44];
+arr.every(function(value){                 // false
+    return value>10
+});
