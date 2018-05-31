@@ -317,3 +317,6 @@ export default {
     }
 };
 
+
+字体族  最后一个指的是非衬线字体 保证各个浏览器都能被识别 保底的字体 英文写在前面 汉字写在后面
+font: normal 14px/1 'Helvetica Neue', Helvetica, Arial, SimSun, '\5b8b\4f53', 'Microsoft Yahei', 'HeiPingFang SC', 'Hiragino Sans GB', sans-serif;
