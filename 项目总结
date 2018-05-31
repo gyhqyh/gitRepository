@@ -1,0 +1,263 @@
+                                api 文件夹下的index
+                                
+const files = require.context('.', true, /\.js/);    把该文件夹下的所有的./index.js niu ./user.js niu 问价名拿出来
+const modules = {};
+console.log(files, 'gzj');    一个函数
+files.keys().forEach((key) => {
+    console.log(key, 'niu');
+    if (key === './index.js') {
+        return;   
+    }
+    modules[key.replace(/(^\.\/|\.js$)/g, '')] = files(key).default;   
+    
+    把 key=./index.js ./ .js去掉   files('./user.js') 拿到的是默认暴露的东西 （./user.js 中采用的是 export default = ...）
+    
+    console.log(files(key), 9999);
+});
+
+export default modules;
+
+
+                            api 文件夹下的 user.js  是用户登录的请求发送的地方
+                            
+
+import $ajax from '@helper/ajax';
+
+export default {
+    login (data) {
+        return $ajax.post('login', data);
+    },
+    logout () {
+        return $ajax.get('logout');
+    }
+};
+
+
+                            helper 文件夹下的 ajax.js  是对axios进行封装。鉴权的地方
+                            
+import axios from 'axios';
+import $q from 'q';     这个包文件可以传输promise状态
+import { $utils } from '@helper';
+
+let cancel = {};
+let promiseArr = {};
+const CancelToken = axios.CancelToken;
+
+// 请求拦截器
+axios.interceptors.request.use(config => {
+    // 发起请求时，取消掉当前正在进行的相同请求
+    if (promiseArr[config.url]) {
+        promiseArr[config.url]('操作取消');
+        promiseArr[config.url] = cancel;
+    } else {
+        promiseArr[config.url] = cancel;
+    }
+    return config;
+}, error => {
+    return Promise.reject(error);
+});
+
+// 默认请求设置
+axios.defaults.baseURL = '/app';
+axios.defaults.headers = {
+    'X-Requested-With': 'XMLHttpRequest'
+};
+axios.defaults.timeout = 10000;
+
+// 覆盖此请求的默认超时
+axios.get('/setLongRequestTimeout', {
+    timeout: 5000
+});
+
+function requestHandle (params) {
+    let defer = $q.defer();
+    axios(params)
+        .then(res => {
+            if (res.data) {
+                if (res.data.success) {
+                    defer.resolve(res.data);
+                } else {
+                    defer.reject(new Error('后台标识success为false'));
+                }
+            } else {
+                defer.reject('没有返回数据');
+            }
+        }).catch(err => {
+            defer.reject(err);
+        });
+
+    return defer.promise;
+}
+
+export default {
+    post: function (url, params, op) {
+        return requestHandle({
+            method: 'post',
+            url: url,
+            data: params,
+            cancelToken: new CancelToken(c => {
+                cancel = c;
+            })
+        });
+    },
+    get: function (url, params, op) {
+        return requestHandle({
+            method: 'get',
+            url: $utils.queryString(url, params),
+            cancelToken: new CancelToken(c => {
+                cancel = c;
+            })
+        });
+    }
+};
+
+                            helper 文件夹下的 auth.js  对cookies操作
+                            
+/*
+* 权限验证模块
+*/
+import Cookies from 'js-cookie';
+
+const TokenKey = 'Admin-Token'; 
+
+export default {
+    getToken () {
+        return Cookies.get(TokenKey);   TokenKey保存在本地
+    },
+
+    setToken (token) {
+        return Cookies.set(TokenKey, token);   token应该是后台传过来的
+    },
+
+    removeToken () {
+        return Cookies.remove(TokenKey);
+    }
+};
+
+
+                            helper 文件夹下的 document.js  对类进行切换 感觉在vue中用途不算太大吧
+                            
+export default {
+    toggleClass (el, className) {
+        if (el.classList) {
+            el.classList.toggle(className);
+        } else {
+            var classes = el.className.split(' ');
+            var existingIndex = classes.indexOf(className);
+
+            if (existingIndex >= 0) {
+                classes.splice(existingIndex, 1);
+            } else {
+                classes.push(className);
+            }
+            el.className = classes.join(' ');
+        }
+    },
+
+    addClass (el, className) {
+        if (el.classList) {
+            el.classList.add(className);
+        } else {
+            el.className += ` ${className}`;
+        }
+    },
+
+    removeClass (el, className) {
+        if (el.classList) {
+            el.classList.remove(className);
+        } else {
+            el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
+        }
+    }
+};
+
+                            helper 文件夹下的 loah.js 
+                            
+/*
+  Freely add the method you need
+*/
+import _ from 'lodash';
+
+export default {
+    clone: _.clone,
+    cloneDeep: _.cloneDeep,
+    endsWith: _.endsWith,
+    debounce: _.debounce,
+    throttle: _.throttle,
+    find: _.find,
+    isEmpty: _.isEmpty,
+    flatten: _.flatten,
+    flattenDepth: _.flattenDepth
+};
+
+                            helper 文件夹下的 utils.js 
+                            
+if (typeof String.prototype.startsWith !== 'function') {
+    Window.String.prototype.startsWith = function (prefix) {
+        return this.slice(0, prefix.length) === prefix;
+    };
+}
+
+export default {
+
+    query (search) {
+        let str = search || window.location.search;
+        let objURL = {};
+
+        str.replace(
+            new RegExp('([^?=&]+)(=([^&]*))?', 'g'),
+            ($0, $1, $2, $3) => {
+                objURL[$1] = $3;
+            }
+        );
+        return objURL;
+    },
+
+    queryString (url, query) {
+        let str = [];
+        for (let key in query) {
+            str.push(key + '=' + query[key]);
+        }
+        let paramStr = str.join('&');
+        return paramStr ? `${url}?${paramStr}` : url;
+    },
+
+    /* -----------------------------localStorage------------------------------------ */
+    /*
+    * set localStorage
+    */
+    setStorage (name, content) {
+        if (!name) return;
+        if (typeof content !== 'string') {
+            content = JSON.stringify(content);
+        }
+        window.localStorage.setItem(name, content);
+    },
+
+  /**
+   * get localStorage
+   */
+    getStorage (name) {
+        if (!name) return;
+        let content = window.localStorage.getItem(name);
+        return JSON.parse(content);
+    },
+
+  /**
+   * delete localStorage
+   */
+    removeStorage (name) {
+        if (!name) return;
+        window.localStorage.removeItem(name);
+    }
+};
+
+
+
+export default {
+    /* 是否是公司邮箱 */
+    isClamcEmail(str) {
+        const reg = /^[a-z0-9](?:[-_.+]?[a-z0-9]+)*@clamc\.com$/i
+        return reg.test(str.trim())
+    }
+}
