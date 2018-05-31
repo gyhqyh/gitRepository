@@ -261,3 +261,45 @@ export default {
         return reg.test(str.trim())
     }
 }
+
+
+                        mock 
+                        
+import Mock from 'mockjs';
+import user from './user';
+
+// Mock.setup({
+//   timeout: 0-300
+// })
+
+// 登录相关
+Mock.mock(/\/app\/login/, 'post', user.loginByUsername);
+Mock.mock(/\/app\/logout/, 'post', user.logout);
+Mock.mock(/\/user\/info\.*/, 'get', user.getUserInfo);
+
+const userMap = {
+    admin: {
+        roles: ['admin'],
+        token: 'admin',
+        name: 'Admin',
+        success: true
+    }
+};
+
+export default {
+    loginByUsername: config => {
+        console.log(config.body, 'mock jieshou');
+        const { username } = JSON.parse(config.body);     针对post请求
+        return userMap[username];
+    },
+    getUserInfo: config => {
+        const { token } = JSON.parse(config.url);
+        if (userMap[token]) {
+            return userMap[token];
+        } else {
+            return false;
+        }
+    },
+    logout: () => 'success'
+};
+
