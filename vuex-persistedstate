@@ -1,0 +1,9 @@
+利用vuex-persistedstate可以实现vuex中的一部分数据是刷新不会改变的；
+import createPersistedState from 'vuex-persistedstate';
+
+const persist = createPersistedState({
+    key: 'gzj',   默认使用localStorage 本地存储 如果想要取出数据的话JSON.parse(localStorage.getItem('gzj)).user.user
+    paths: ['user.user'] state: {user: {user: ''},password: ''} 只有user内的user会被存储到本地，另外的不会被存储到本地
+});
+
+plugins: [persist]
