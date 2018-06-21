@@ -1,0 +1,7 @@
+<div v-bind:class="[isActive ? activeClass : '', errorClass]"></div>   数组
+
+<div class="static"
+     v-bind:class="{ active: isActive, 'text-danger': !isActive }">     对象
+</div>
+
+对组件添加类会添加到这个.vue最外层的包裹器上面
