@@ -10,3 +10,39 @@ Grunt和Gulp是一种优化前段开发流程的工具，在一个配置文件�
 Webpack是一种模块化的解决方案，把你的项目当成一个整体，通过给定的一个主文件，例如 index.js。她会从这个主文件中找到你的项目的所有依赖文件，然后使用loader处理他们，最后打包成一个或者多个浏览器可以识别的javascript文件。
 
 一句话：Webpack的处理速度更快更直接，能够打包更多不同类型的文件。
+
+
+ warning  in ./src/assets/icons/zero.svg
+
+Module parse failed: Unexpected token (1:0)
+You may need an appropriate loader to handle this file type.
+| <?xml version="1.0" encoding="iso-8859-1"?>
+| <!-- Generator: Adobe Illustrator 19.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+| <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+
+ @ ./src/assets/icons sync \.svg$
+ @ ./src/assets/icons/index.js
+ @ ./node_modules/happypack/loader.js?id=happy-babel-vue!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./src/components/SvgIcon/
+index.vue
+ @ ./src/components/SvgIcon/index.vue
+ @ ./src/ui.js
+ @ ./src/main.js
+ @ multi ./build/dev-client ./src/main.js
+
+ warning  in ./src/assets/icons/logout.svg
+
+Module parse failed: Unexpected token (1:0)
+You may need an appropriate loader to handle this file type.
+| <?xml version="1.0" encoding="iso-8859-1"?>
+| <!-- Generator: Adobe Illustrator 19.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+| <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+
+ @ ./src/assets/icons sync \.svg$
+ @ ./src/assets/icons/index.js
+ @ ./node_modules/happypack/loader.js?id=happy-babel-vue!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./src/components/SvgIcon/
+index.vue
+ @ ./src/components/SvgIcon/index.vue
+ @ ./src/ui.js
+ @ ./src/main.js
+ @ multi ./build/dev-client ./src/main.js
+
