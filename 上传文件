@@ -1,0 +1,85 @@
+前端上传文件的方法总结
+最近做了阿里云的oss上传，顺便来总结下上传文件的几种主要方法。
+
+第一种：经典的form和input上传。
+
+设置form的aciton为后端页面，enctype="multipart/form-data"，type=‘post’
+
+<form action='uploadFile.php' enctype="multipart/form-data" type='post'>
+　　<input type='file'>
+　　<input type='hidden' name='userid'>
+　　<input type='hidden' name='signature'>
+　　<button>提交</button>
+</form>
+使用input选择文件，设置好其他input的值，点击提交，将文件数据及签名等认证信息发送到form设置的action对应的页面，浏览器也会跳转到该页面。触发form表单提交数据的方式有2种，一种是在页面上点击button按钮或<input type='submit'>按钮触发，第二种是在js中执行form.submit()方法。
+
+优点：使用简单方便，兼容性好，基本所有浏览器都支持。
+
+缺点：1. 提交数据后页面会跳转（下面会讲如何禁止页面跳转）。
+
+           2.因为是浏览器发起的请求，不是一个ajax，所以前端无法知道什么时候上传结束。
+
+           3. form表单里发送除文件外的数据，一般是新建一个type=hidden的input，value=‘需要传的数据’，每发送一个数据就需要一个input，一旦多了就会使得dom看起来比较冗余。
+
+小技巧：
+
+form表单提交数据后会自动跳转到action指定的页面，为了禁止页面跳转，可以在页面中新建一个空的ifame，比如name='upload'，然后设置form的target="Uploader"，form有一个target的属性，规定在何处打开action，这样form提交数据后就会仍停留在当前页。代码如下：
+
+<form action='uploadFile.php' enctype="multipart/form-data" type='post'  target="uploader1">
+<input type='file'>
+<button>提交</button>
+</form>
+
+<ifrmae name='upload' id='uploader1'></iframe>
+这样写的另一个好处是，可以知道什么时候上传完成并接收到后端的回调结果。比如上面这个例子，文件数据发送到了 'uploadFile.php'，假设该页面处理完数据后返回了一个地址，该地址会被写入到之前的iframe中。所以在ifame的onload函数触发时，也就是上传完成后，可以在iframe中读取到后端返回的数据。
+
+var  iframe = document.getElementById('upload1');
+iframe.onload = function () {  
+                    var doc = window.frames['uploader1'].document;
+                    var pre = doc.getElementsByTagName('pre');
+                    var obj = JSON.parse(pre[0].innerHTML);
+                }
+ 使用这种方法时需要注意，iframe有跨域限制，创建出来的iframe的地址如果和当前页面地址不同源，会报错。这种情况下，建议大家在iframe的onload函数中，再次向后端请求一个接口获取文件地址，而不是直接去iframe里读取。或者返回这样的数据。
+
+<script type="text/javascript">
+window.top.window[callback](data)
+</script>
+callback是和前端约定好的名字，上传完成后触发该函数并返回后端数据。
+第二种：使用formData上传。
+
+用js构造form表单的数据，简单高效，但最低只兼容IE10，所以需要兼容IE9的童鞋们就略过这个方法吧。
+
+html:
+
+<input type='file'>
+js:
+
+var formData = new FormData();
+formData.append("userid", userid);
+formData.append("signature", signature);
+formData.append("file", file); //file是blob数据
+//再用ajax发送formData到服务器即可，注意一定要是post方式上传
+说明：第一种方法提到了创建多个type=‘hidden’的input来发送签名数据，这儿可以用formData.append方法来代替该操作，避免了dom中有多个input的情况出现。最后将file数据也append到formData发送到服务器即可完成上传。
+
+优点：由于这种方式是ajax上传，可以准确知道什么时候上传完成，也可以方便地接收到回调数据。
+
+缺点：兼容性差
+
+第三种：使用fileReader读取文件数据进行上传。
+
+HTML5的新api，兼容性也不是特别好，只兼容到了IE10。
+
+复制代码
+var fr = new FileReader();
+                fr.readAsDataURL(file);
+                fr.onload = function (event) {
+                    var data= event.target.result; //此处获得的data是base64格式的数据
+                   　img.src = data;
+                    ajax(url,{data} ,function(){})
+                }
+复制代码
+上面获得的data可以用来实现图片上传前的本地预览，也可以用来发送base64数据给后端然后返回该数据块对应的地址。
+
+优点： 同第二种
+
+缺点：一次性发送大量的base64数据会导致浏览器卡顿，服务器端接收这样的数据可能也会出现问题。
