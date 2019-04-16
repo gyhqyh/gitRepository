@@ -1,3 +1,6 @@
+
+ @cell-click="typeAH('key', 'value', arguments)" // 自定义事件从父组件， 子组件接受参数
+
 props 父传递给子信息 
 如果props传递的是引用类型 会达到父子同步变换的情况，应该尽量避免 object arrary
 对于props style、class 会采取合并处理  type= date 会破坏 组件内部的type= text  对于非props的属性传递 都会被添加到组件的根元素上面
