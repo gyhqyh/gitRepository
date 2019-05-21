@@ -1,3 +1,4 @@
+import {JSEncrypt} from 'jsencrypt';
 // Encrypt with the public key... js
           var encrypt = new JSEncrypt();
           encrypt.setPublicKey(pubkey); // pubkey是公钥内容
