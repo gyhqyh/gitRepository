@@ -68,3 +68,11 @@
 兼容好
 
 非第一个 .el-button+.el-button    .el-button: not(:first-child)
+// 多重背景图
+background:url(../images/welcome_text.png) no-repeat ,url(../images/welcome_bg.png) no-repeat top right #fff;
+// 让链接后面根生一个背景图
+ a[href^="http://"]{
+     line-height: 40px;
+     padding-right: 20px;
+     background: url("/static/icon/icon_step1.png") no-repeat center right;
+}
