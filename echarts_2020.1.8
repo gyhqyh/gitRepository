@@ -1,0 +1,268 @@
+纵观ECharts图表实例化的API，主要有一下几个相关的实例化方法：
+
+1、setOption(Object option,{boolean = true} notMerge)
+
+参数：
+
+1）、Object类型的参数 option，表示图表数据结构 ，形如：
+
+ 
+
+ 
+1.var option  = {
+2.                title: {
+3.                    text: "我的第一个ECharts图表示例"
+4.                },
+5.                tooltip: {
+6.                    trigger: 'axis'
+7.                }
+8.            };
+ 
+
+2）、boolean notMerge，表示是否合并option。默认为false，可以不设置。
+
+描述：
+
+万能接口，配置图表实例任何可配置选项（详见option），多次调用时option选项是默认是合并（merge）的，如果不需求，可以通过notMerger参数为true阻止与上次option的合并。
+
+2、getOption()
+
+描述：
+
+返回内部持有的当前显示option克隆
+
+3、setSeries(Array series,{boolean=}notMerge)
+
+参数：
+
+1）、Array类型的series序列数据，形如：
+
+ 
+
+ 
+01.var Array seriesList = new Array();
+02. 
+03.var seriesObj = new seriesObj();
+04.seriesObj.name = "蒸发量";
+05.seriesObj.type = "line";
+06.seriesObj.data = [2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3];
+07. 
+08.//设置series
+09.myChart.setSeries(seriesList,false);
+ 
+
+2）、boolean notMerge 表示是否合并series，默认为false，可以不设置。
+
+描述：
+
+数据接口，驱动图表生成的数据内容，效果等同调用setOption({series:{...}})
+
+4、getSeries()
+
+描述：
+
+返回内部持有的当前显示series克隆，效果同return getOption().series
+
+5、addData(....)
+
+参数：
+
+1）、单组数据参数
+
+11）、{number} seriesIdx ：表示给哪一条series添加数据，series脚标从0开始；
+
+12）、{number | Object} data；
+
+13）、{boolean=} isHead ；
+
+14）、{boolean=} dataGrow；
+
+15）、{string=} additionData；
+
+2）、多组数据参数
+
+其实就是多个单组数据的形成的集合或者数组{Array} params
+
+描述：
+
+动态数据接口
+
+seriesIdx 系列索引 
+
+data 增加数据 
+
+isHead 是否队头加入，默认，不指定或false时为队尾插入 
+
+dataGrow 是否增长数据队列长度，默认，不指定或false时移出目标数组对位数据 
+
+additionData 是否增加类目轴(饼图为图例)数据，附加操作同isHead和dataGrow 
+
+多组数据添加时参数为： 
+
+params == [[seriesIdx, data, isHead, dataGrow, additionData], [...]]
+
+6、on(string eventName,function eventListner)
+
+描述：
+
+事件绑定，支持事件有：REFRESH，RESTORE，CLICK，HOVER，DATA_CHANGED，MAGIC_TYPE_CHANGED，DATA_VIEW_CHANGED，DATA_ZOOM，DATA_RANGE，LEGEND_SELECTED，MAP_SELECTED
+
+示例代码形如：
+
+ 
+
+ 
+1.//ECharts图表的click事件监听
+2.myChart.on("click", function () {
+3.        alert("你点击我了!");
+4.});
+ 
+
+7、un(string eventName,function eventListner)
+
+描述：
+
+解除某个事件的绑定，示例代码形如：
+
+ 
+
+ 
+1.myChart.un("click", function () {
+2.             alert("悲剧，你注销我了!");
+3.});
+8、showLoading(Object loadingOption)
+
+描述：
+
+过渡控制（详见loadingOption），显示loading（读取中）代码片段形如：
+
+ 
+
+ 
+01.//图表显示提示信息
+02.myChart.showLoading({
+03.    text: "图表数据正在努力加载...",
+04.    x: "center",
+05.    y: "center",
+06.    textStyle: {
+07.        color:"red",
+08.        fontSize:14
+09.    },
+10.    effect:"spin"
+11.});
+注意：
+
+ 
+
+9、hideLoading()
+
+描述：
+
+隐藏图表数据加载过度提示信息，示例代码：
+
+ 
+
+ 
+1.myChart.hideLoading();
+ 
+
+10、getZrender()
+
+描述：
+
+获取当前图表所用ZRender实例，可用于添加额外图形或进行深度定制，zrender接口详见ZRender 示例代码如下所示：
+
+ 
+
+ 
+1.nyChart.getZrender();
+ 
+
+11、getDataURL(string imgType)
+
+描述：
+
+获取当前图表的Base64图片dataURL，imgType 图片类型，支持png|jpeg，默认为png
+
+示例代码如下所示：
+
+ 
+
+ 
+1.var imgUrl = myChart.getDataURL("png");
+12、getImage(string imgType)
+
+描述：
+
+获取一个当前图表的img，imgType 图片类型，支持png|jpeg，默认为png，示例代码片段：
+
+ 
+
+ 
+1.//前端导出图表图片
+2.var imgObj = myChart.getImage("jpeg");
+ 
+
+主要是拿到一个图片对象，然后获取其outerHTML属性就是一个图表image的html完整标签，我们可以使用其直接显示在页面上。
+
+13、resize()
+
+描述：
+
+ECharts没有绑定resize事件，显示区域大小发生改变内部并不知道，
+
+使用方可以根据自己的需求绑定关心的事件，主动调用resize达到区域更新的效果。
+
+ 
+
+ 
+1.myChart.resize();
+ 
+
+14、refresh()
+
+描述：
+
+刷新图表，图例选择、数据区域缩放，拖拽状态均保持。
+
+ 
+
+ 
+1.myChart.refresh();
+ 
+
+15、restore()
+
+描述：
+
+还原图表，各种状态均被清除，还原为最初展现时的状态。
+
+16、clear()
+
+描述：
+
+清空绘画内容，清空后实例可用，因为并非释放示例的资源，释放资源我们需要dispose()
+
+ 
+
+ 
+1.myChart.clear();
+ 
+
+17、dispose()
+
+描述：
+
+释放图表实例，释放后实例不再可用。
+
+ 
+
+ 
+1.myChart.dispose();
+ 
+
+目前ECharts图表的实例化主要包含当前十七个相关方法，后期不保证有补充的节奏，就目前来说，这十七个已经够用了的。
+
+注意：
+
+1、以上方法的使用前提都是需要获得ECharts初始化对象过后才可以进行，否则会产生报错现象。
