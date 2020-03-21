@@ -1,9 +1,0 @@
-提交 a
-改动 a
-pull 拉取不下来 （别人改动了a）没有confict提示 也没有拉取下来文件 会报告一个error
-error: Your local changes to the following files would be overwritten by merge:
-        src/views/login/LoginTwo.vue
-Please commit your changes or stash them before you merge.
-
-    -选择一提交本地修改，拉取解决冲突 
-    -checkout 回退到最初 在拉取
