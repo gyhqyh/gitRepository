@@ -1,0 +1,8 @@
+methods {
+  fun (keword) {
+    clearTimeout(this.fun.timer)
+    if (keyword) {
+      this.fun.timer = setTimeout(function () {}, 800)
+    }
+  }
+}
