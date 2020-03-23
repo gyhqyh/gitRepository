@@ -1,0 +1,61 @@
+
+<template>
+    <div>
+ 
+       <el-form :model="sub1Form" :rules="sub1Rules" ref="sub1Form" label-width="100px" class="demo-ruleForm">
+              <el-form-item label="发料单数" prop="fds">
+                   <el-input v-model="sub1Form.fds" size="mini"></el-input>
+               </el-form-item>
+               <el-form-item label="今日" prop="name">
+                    <el-input v-model="sub1Form.name" size="mini"></el-input>
+               </el-form-item>
+            </el-form>
+    </div>
+</template>
+<script>
+export default {
+    data(){
+        var valiNumberPass1 = (rule, value, callback) => {//包含小数的数字
+            let reg = /^[+-]?(0|([1-9]\d*))(\.\d+)?$/g;
+            if (value === '') {
+                callback(new Error('请输入内容'));
+            } else if (!reg.test(value)) {
+                callback(new Error('请输入数字'));
+            } else {
+                callback();
+            }
+        };
+        var valiNumberPass2 = (rule, value, callback) => {//正整数
+            let reg = /^[+]{0,1}(\d+)$/g;
+            if (value === '') {
+                callback(new Error('请输入内容'));
+            } else if (!reg.test(value)) {
+                callback(new Error('请输入0及0以上的整数'));
+            } else {
+                callback();
+            }
+        };
+        return {      
+            sub1Form:{
+                fds:'',
+                name:''
+            },
+            sub1Rules: {
+                fds:[
+                    { required: true, validator:valiNumberPass2, trigger: "blur" }
+                ],
+                name: [
+                   { required: true, validator:valiNumberPass1, trigger: "blur" }
+                ],
+            },
+            
+        }
+    },
+    methods:{
+       
+    }
+}
+
+————————————————
+版权声明：本文为CSDN博主「有蝉」的原创文章，遵循 CC 4.0 BY-SA 版权协议，转载请附上原文出处链接及本声明。
+原文链接：https://blog.csdn.net/qq_37899792/article/details/89880923
