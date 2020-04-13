@@ -1,5 +1,19 @@
 bs架构 --> 部署资源 到服务器
 加快web访问速度、减少用户等待时间
-1. 减少http请求  合并模块
-2. 减少资源体积  压缩css、js、图片等资源
+1. 减少http请求  合并模块 （CommonsChunkPlugin 多次 DLLPlugin 1次）dll打包，打包第三方模块，
+2. 减少资源体积  压缩css、js、图片等资源（webpack、UglifyJS、OptimizeCSSAssetsWebpackPlugin）图片base64、雪碧图
 3. 浏览器dns解析 dns缓存
+4. will-change: height;告诉浏览器当前元素高度将要应用动画，需要开启GPU加速（translate3d也能开启）
+5.webpack代码分割
+    // 公共代码提取， 每次打包都走了一遍，不如dll
+     new webpack.optimize.CommonsChunkPlugin({
+          name: 'common' // bundle 名称
+    })
+    // 懒加载
+    const router = new VueRouter({
+    routes: [
+        { path: '/login', component: () => import('@/views/login'), },
+        { path: '/home', component: () => import('@/views/home'), }
+      ]
+    })
+    chunkFilename: utils.assetsPath('js/[id].[chunkhash].js')
