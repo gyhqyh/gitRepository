@@ -1,0 +1,22 @@
+class Bus {
+    cuonstructor () {
+        this.callbacks = {};
+    }
+    $on (name, cb) {
+      if (name && typeof cb === 'function') {
+          this.callbacks[name] = this.callbacks[name] || [];
+          this.callbacks[name].push(cb)
+      }
+    }
+    $emit (name, ...args) {
+      this.callbacks[name] && this.callbacks[name].forEach(item => {
+          cb(...args);
+      })
+    }
+}
+
+let $bus = new Bus();
+Vue.property.$bus = $bus;
+
+
+-----------------------------------------------------------------------
