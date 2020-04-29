@@ -1,0 +1,86 @@
+// 二叉树
+class TreeNode {
+  constructor (value) {
+    this.value = value;
+    this.left = null;
+    this.right = null;
+  }
+}
+let root = new TreeNode(1)
+root.left = new TreeNode(2)
+root.right = new TreeNode(3)
+// 遍历数
+function preOrder (root) {
+  if (root) {
+    console.log(root.value);
+    preOrder(root.left);
+    preOrder(root.right);
+  }
+}
+// 链表
+class ListNode  {
+  constructor (value) {
+    this.value = value;
+    this.next = null;
+  }
+}
+let node1 = new List(1)
+node1.next = new ListNode(2)
+node1.next.next =new ListNode(3)
+
+function ergodicListNode (ListNode) {
+  if (ListNode.next) {
+    console.log(ListNode.value)
+    ergodicListNode(ListNode.next)
+  }
+}
+ergodicListNode(node1)
+let tempNode = node1
+while (tempNode.next) {
+    console.log(tempNode.value)
+    tempNode = tempNode.next;
+}
+// 队列 先进先出 回调队列（js单线程）
+class Queue {
+  constructor () {
+    this.queue = []
+  }
+  size () {
+    return this.queue.length;
+  }
+  is_empty () {
+    return this.size ==== 0;
+  }
+  enqueue (value) {
+    this.queue.unshift(value)
+  }
+  dequeue () {
+    if (this.is_empty()) {
+      return null;
+    } else {
+      return this.queue.pop()
+    }
+  }
+}
+// 栈   后进先出 递归调用帧 
+class Stack {
+  constructor () {
+    this.stack = [];
+  }
+  size () {
+    return this.stack.length;
+  }
+  is_empty () {
+    return this.size() === 0;
+  }
+  push (val) {
+    this.stack.push(val)
+  }
+  pop () {
+    if (this.is_empty()) {
+      return null
+    } else {
+        return this.stack.pop()
+    }
+  }
+}
