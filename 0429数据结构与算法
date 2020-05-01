@@ -84,3 +84,55 @@ class Stack {
     }
   }
 }
+// 插入排序， 类似插牌（打扑克） 时间复杂度 n*(n + 1) /2 为 O(N* N)
+function insertSort (arr) {
+  for (let j = 1, leg = arr.length; j < leg; j++) {
+      let i = j -1;
+      // 右手抓到一张新牌
+      let cacheItem = arr[j]
+      // 右手牌插入左手指定位置
+      while(i >= 0 && arr[i] > cacheItem) {
+          arr[i + 1]  = arr[i]
+          i--
+      }
+      // 左手有牌且牌大于右手牌
+      arr[i + 1] = cacheItem
+  }
+}
+// 二分查找
+function binarySearch (arr, t) {
+  let left = 0;
+  let right = arr.length;
+  while (right > left) {
+    let middle = Number.parseInt((left + right) / 2);
+    if (arr[middle] === t) {
+      return middle;
+    } else if (arr[middle] > t) {
+      left = middle + 1;
+    } else {
+      right = middle - 1;
+    }
+  }
+  return -1;
+}
+// 快速排序 a 数组、p 最左边的下标 、 r 最右边的下标
+function quickSort (a, p, r) {
+  if (p < r) {
+    let q = partition (a, p, r);
+    quicksort(p, q-1);
+    quicksort(q+1, r)
+  }
+}
+partition (a, p, r) {
+  // 哨兵，喊口号的人
+  let x= a[r];
+  let i = p -1;
+  for (let j = p; j < r; j++) {
+    if(a[j] <= x) {
+      i++;
+      [a[i], a[j]] = [a[j], a[i]]
+    }
+  }
+  [a[i + 1], a[r]]  = [a[r], a[i + 1]]
+  return i + 1
+}
