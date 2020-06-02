@@ -87,6 +87,7 @@ $("<option value='111'>UPS Ground</option>").appendTo($("select[name=ISHIPTYPE]"
 
 //取得下拉選單的選取值
 
+
 $(#testSelect option:selected').text();
 或$("#testSelect").find('option:selected').text();
 或$("#testSelect").val();
