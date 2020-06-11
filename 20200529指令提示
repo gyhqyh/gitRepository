@@ -1,3 +1,5 @@
+
+// https://blog.csdn.net/weixin_34138377/article/details/91412206 网上写好的
 const camelCase = function(name) {
     return name.replace(SPECIAL_CHARS_REGEXP, function(_, separator, letter, offset) {
         return offset ? letter.toUpperCase() : letter;
