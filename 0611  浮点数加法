@@ -1,0 +1,46 @@
+function switchInt (n) {
+   if (!/[+-]?(0|[1-9]+\d*)(\.\d+)?/.test(n)) {
+      throw new Error(n + '：  非合法数字')
+   }
+   let result = {v: n, t: 0}
+   if (Number.Integer(n)) {
+      return result;
+   }
+   let [i, f] = String(n).split('.');
+   result = {v: Number(i + f), t: Math.pow(f.length)};
+   return result;
+} 
+function calc (n1, n2, flag) {
+  if (flag === '+') {
+     let {v: v1, t: t1 } = switchInt(n1);
+     let {v: v2, t: t2} = switchInt(n2);
+     if (t1 === t2) {
+      return (v1 + v2 ) / t1;
+     } else {t1 > t2} {
+       return (v1 + v2 * t1/ t2) / t1
+     } else {
+       return (v2 + v1 * t2/ t1) / t2
+     }
+  }
+   if (flag === '-') {
+     let {v: v1, t: t1 } = switchInt(n1);
+     let {v: v2, t: t2} = switchInt(n2);
+     if (t1 === t2) {
+      return (v1 - v2 ) / t1;
+     } else {t1 > t2} {
+       return (v1 - v2 * t1/ t2) / t1
+     } else {
+       return (v2 - v1 * t2/ t1) / t2
+     }
+  }
+   if (flag === '*') {
+     let {v: v1, t: t1 } = switchInt(n1);
+     let {v: v2, t: t2} = switchInt(n2);
+      return (v1 * v2 ) / (t1 * t2)
+  }
+   if (flag === '*') {
+     let {v: v1, t: t1 } = switchInt(n1);
+     let {v: v2, t: t2} = switchInt(n2);
+     return (v1 / v2 ) / (t2 / t1)
+  }
+}
