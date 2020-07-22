@@ -1,23 +1,5 @@
 npm install --registry=https://registry.npm.taobao.org
 解决直接使用cnpm中出现的各种诡异的的问题
 npx mocha 直接运行node——moudle下面的包文件
-webpack中使用jQuery的配置
 
-new webpack.ProvidePlugin({
-  $: 'jquery' ,
-  'jQuery': 'jquery'
-})
 
-配置路径问题
-alias: {
-  'src': path.resolve(__dirname, '../src'),
-  'components': path.resolve(__dirname, '../src/components'),
-  'api': path.resolve(__dirname, '../src/api'),
-  'utils': path.resolve(__dirname, '../src/utils'),
-  'store': path.resolve(__dirname, '../src/store'),
-  'router': path.resolve(__dirname, '../src/router')
-}
-
-//使用
-import stickTop from 'components/stickTop'
-import getArticle from 'api/article'
