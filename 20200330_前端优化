@@ -17,3 +17,6 @@ bs架构 --> 部署资源 到服务器
       ]
     })
     chunkFilename: utils.assetsPath('js/[id].[chunkhash].js')
+    
+will-change：height；
+告诉哦浏览器当前元素需要进行高度变换， 这将开启GPU加速， 从而优化速度
